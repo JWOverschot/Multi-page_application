@@ -11,15 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
 Route::get('/', 'ProductsController@index');
 
 Route::get('/dashboard', 'DashboardController@index');
+
+Route::get('/welkom', 'PagesController@index');
 
 Route::get('/about', function(){
 	return view('pages.about');
@@ -28,3 +26,5 @@ Route::get('/about', function(){
 Route::get('/users/{id}/{name}', function($id, $name){
 	return 'This is user '.$name;
 });
+
+Route::resource('products', 'ProductsController');
