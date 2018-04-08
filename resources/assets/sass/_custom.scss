@@ -1,0 +1,14 @@
+p.old-price {
+	text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.card .discount {
+    position: absolute;
+    right: 0;
+    margin: 10px;
+    color: white;
+    padding: 5px;
+    background: $discount-bg;
+    height: 37px;
+}
