@@ -48,12 +48,8 @@
 		</div>
 
 		<div class="form-group">
-			{{Form::label('category', 'Category')}}
-			<select name="category" class="custom-select" multiple>
-				@foreach($categories as $category)
-					<option value="{{$category->category_id}}">{{$category->category_name}}</option>
-				@endforeach
-			</select>
+			{{Form::label('category[]', 'Category')}}
+			{{Form::select('category[]', $options, $selectedOptions, ['class' => 'form-control', 'multiple' => 'multiple'])}}
 		</div>
 
 		<label>Specifications</label>

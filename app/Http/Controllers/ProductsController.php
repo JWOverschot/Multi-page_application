@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Product;
 use App\Category;
+use App\CategoryProduct;
 
 class ProductsController extends Controller
 {
@@ -54,6 +55,13 @@ class ProductsController extends Controller
         $post->product_discount_percentage = $request->input('discount-percentage');
         $post->product_description = $request->input('description');
         $post->save();
+        // Handle categories
+        foreach($request->input('category') as $selectedCategory){
+            $category = new CategoryProduct;
+            $category->category_id_fk = $selectedCategory;
+            $category->product_id_fk = $product->product_id;
+            $category->save();
+        }
 
         return redirect('/products')->with('success', 'Product Created');
     }
@@ -79,8 +87,21 @@ class ProductsController extends Controller
     public function edit($id)
     {
         $categories = Category::orderBy('category_name', 'asc')->get();
+        $selectedOptionsArray = CategoryProduct::select('category_id_fk')->where('product_id_fk', $id)->get()->toArray();
         $product = Product::where('product_id', $id)->first();
         return view('products.edit')->with(['product' => $product, 'categories' => $categories]);
+        $options = [];
+        $selectedOptions = [];
+
+        foreach ($selectedOptionsArray as $selectedOption) {
+            array_push($selectedOptions, $selectedOption['category_id_fk']);
+        }
+
+        foreach ($categories as $category) {
+            $options[$category->category_id] = $category->category_name;
+        }
+
+        return view('products.edit')->with(['product' => $product, 'categories' => $categories, 'medias' => $medias, 'specifications' => $specifications, 'options' => $options, 'selectedOptions' => $selectedOptions]);
     }
 
     /**
@@ -108,6 +129,16 @@ class ProductsController extends Controller
         $post->product_discount_percentage = $request->input('discount-percentage');
         $post->product_description = $request->input('description');
         $post->save();
+        //delete exsisting categories for this product
+        $delCat = CategoryProduct::where('product_id_fk', $id)->delete();
+
+        // Handle categories
+        foreach($request->input('category') as $selectedCategory){
+            $category = new CategoryProduct;
+            $category->category_id_fk = $selectedCategory;
+            $category->product_id_fk = $product->product_id;
+            $category->save();
+        }
 
         return redirect('/products')->with('success', 'Product Updated');
     }

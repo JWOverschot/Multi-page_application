@@ -49,7 +49,7 @@
 
 		<div class="form-group">
 			{{Form::label('category', 'Category')}}
-			<select name="category" class="custom-select" multiple>
+			<select name="category[]" class="custom-select" multiple>
 				@foreach($categories as $category)
 					<option value="{{$category->category_id}}">{{$category->category_name}}</option>
 				@endforeach
