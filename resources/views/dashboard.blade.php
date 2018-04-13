@@ -14,7 +14,13 @@
                         </div>
                     @endif
                     <h3>User information</h3>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Name: {{Auth::user()->name}}</li>
+                        <li class="list-group-item">Email: {{Auth::user()->email}}</li>
+                    </ul>
+                    <br>
                     <h3>Your Orders</h3>
+                    <p>You haven't made any ordrs yet.</p>
                 </div>
             </div>
         </div>
