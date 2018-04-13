@@ -2,7 +2,7 @@
 
 @section('content')
 	<h1>Edit Product</h1>
-	{!! Form::open(['action' => ['ProductsController@update', $product->product_id], 'methode' => 'POST']) !!}
+	{!! Form::open(['action' => ['ProductsController@update', $product->product_id], 'methode' => 'POST', 'enctype' => 'multipart/form-data']) !!}
 		<div class="form-group">
 			{{Form::label('name', 'Name')}}
 			{{Form::text('name', $product->product_name, ['class' => 'form-control'])}}
@@ -52,21 +52,29 @@
 			{{Form::select('category[]', $options, $selectedOptions, ['class' => 'form-control', 'multiple' => 'multiple'])}}
 		</div>
 
-		<label>Specifications</label>
-		<div class="row">
-			<div class="col-6">
-				<div class="form-group">
-					{{Form::label('specification-name', 'Specification name')}}
-					{{Form::text('specification-name', '', ['class' => 'form-control'])}}
+		<label for="specification-name">Specifications</label>
+		@foreach($specifications as $k=>$v)
+			<div class="row">
+				<div class="col-6">
+					<div class="form-group">
+						{{Form::label('specification-name', 'Specification name')}}
+						{{Form::text('specification-name', $k, ['class' => 'form-control'])}}
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="form-group">
+						{{Form::label('specification-value', 'Specification value')}}
+						@if($v === true)
+							{{Form::text('specification-value', 'True', ['class' => 'form-control'])}}
+						@elseif($v === false)
+							{{Form::text('specification-value', 'False', ['class' => 'form-control'])}}
+						@else
+							{{Form::text('specification-value', $v, ['class' => 'form-control'])}}
+						@endif
+					</div>
 				</div>
 			</div>
-			<div class="col-6">
-				<div class="form-group">
-					{{Form::label('specification-value', 'Specification value')}}
-					{{Form::text('specification-value', '', ['class' => 'form-control'])}}
-				</div>
-			</div>
-		</div>
+		@endforeach
 		{{Form::hidden('_method', 'PUT')}}
 		{{Form::submit('Submit', ['class' => 'btn btn-primary'])}}
 	{!! Form::close() !!}

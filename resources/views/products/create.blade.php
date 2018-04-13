@@ -2,7 +2,7 @@
 
 @section('content')
 	<h1>Create Product</h1>
-	{!! Form::open(['action' => 'ProductsController@store', 'methode' => 'POST']) !!}
+	{!! Form::open(['action' => 'ProductsController@store', 'methode' => 'POST', 'enctype' => 'multipart/form-data']) !!}
 		<div class="form-group">
 			{{Form::label('name', 'Name')}}
 			{{Form::text('name', '', ['class' => 'form-control'])}}
@@ -56,7 +56,7 @@
 			</select>
 		</div>
 
-		<label>Specifications</label>
+		<label for="specification-name">Specifications</label>
 		<div class="row">
 			<div class="col-6">
 				<div class="form-group">

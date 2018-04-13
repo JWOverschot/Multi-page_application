@@ -43,18 +43,58 @@ class ProductsController extends Controller
             'name' => 'required',
             'description' => 'required',
             'price' => 'required',
-            'media' => 'required',
+            'media' => 'image|required|max:20000',
             'category' => 'required',
-            'specifications' => 'required'
+            'specification-name' => 'required',
+            'specification-value' => 'required'
         ]);
 
+        //handle file upload
+        if($request->hasFile('media')){
+            $media = [];
+            $filetype = 'image';
+            $filenameWithExt = $request->file('media')->getClientOriginalName();
+            // Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just ext
+            $extension = $request->file('media')->getClientOriginalExtension();
+            // Filename to store
+            $filenameToStore = $filename.'_'.time().'.'.$extension;
+            // Upload Image
+            $path = $request->file('media')->storeAs('public/product_images', $filenameToStore);
+            // Check filetype
+            //$filetype = mime_content_type($filenameToStore);
+            if (strpos($filetype, 'image')) {
+                $filetype = 'image';
+            }
+            else if (strpos($filetype, 'video')) {
+                $filetype = 'video';
+            }
+            // Data to object
+            $mediaObj = (object) [
+                'alt' => $filename,
+                'url' => $filenameToStore,
+                'type' => $filetype
+            ];
+            array_push($media, $mediaObj);
+            $media = json_encode($media);
+        }
+        // Handle specs
+        $specificationsObj = (object) [
+                $request->input('specification-name') => $request->input('specification-value')
+        ];
+        $specificationsObj = json_encode($specificationsObj);
+
         // Create product
-        $post = new Product;
-        $post->product_name = $request->input('name');
-        $post->product_price = $request->input('price');
-        $post->product_discount_percentage = $request->input('discount-percentage');
-        $post->product_description = $request->input('description');
-        $post->save();
+        $product = new Product;
+        $product->product_name = $request->input('name');
+        $product->product_price = $request->input('price');
+        $product->product_discount_percentage = $request->input('discount-percentage');
+        $product->product_description = $request->input('description');
+        $product->product_media = $media;
+        $product->product_specifications = $specificationsObj;
+        $product->save();
+
         // Handle categories
         foreach($request->input('category') as $selectedCategory){
             $category = new CategoryProduct;
@@ -74,8 +114,12 @@ class ProductsController extends Controller
      */
     public function show($id)
     {
-        $product = Product::where('product_id', $id)->first();
-        return view('products.show')->with('product', $product);
+        $categories = Category::orderBy('category_name', 'asc')->get();
+        $product = Product::find($id);
+        $medias = json_decode($product->product_media); 
+        $specifications = json_decode($product->product_specifications);
+
+        return view('products.show')->with(['product' => $product, 'categories' => $categories, 'medias' => $medias, 'specifications' => $specifications]);
     }
 
     /**
@@ -89,7 +133,9 @@ class ProductsController extends Controller
         $categories = Category::orderBy('category_name', 'asc')->get();
         $selectedOptionsArray = CategoryProduct::select('category_id_fk')->where('product_id_fk', $id)->get()->toArray();
         $product = Product::where('product_id', $id)->first();
-        return view('products.edit')->with(['product' => $product, 'categories' => $categories]);
+        $medias = json_decode($product->product_media); 
+        $specifications = json_decode($product->product_specifications);
+
         $options = [];
         $selectedOptions = [];
 
@@ -117,18 +163,60 @@ class ProductsController extends Controller
             'name' => 'required',
             'description' => 'required',
             'price' => 'required',
-            'media' => 'required',
+            'media' => 'image|max:20000',
             'category' => 'required',
-            'specifications' => 'required'
+            'specification-name' => 'required',
+            'specification-value' => 'required'
         ]);
 
-        // Create product
-        $post = Product::where('product_id', $id);
-        $post->product_name = $request->input('name');
-        $post->product_price = $request->input('price');
-        $post->product_discount_percentage = $request->input('discount-percentage');
-        $post->product_description = $request->input('description');
-        $post->save();
+        //handle file upload
+        if($request->hasFile('media')){
+            $media = [];
+            $filetype = 'image';
+            $filenameWithExt = $request->file('media')->getClientOriginalName();
+            // Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just ext
+            $extension = $request->file('media')->getClientOriginalExtension();
+            // Filename to store
+            $filenameToStore = $filename.'_'.time().'.'.$extension;
+            // Upload Image
+            $path = $request->file('media')->storeAs('public/product_images', $filenameToStore);
+            // Check filetype
+            //$filetype = mime_content_type($filenameToStore);
+            if (strpos($filetype, 'image')) {
+                $filetype = 'image';
+            }
+            else if (strpos($filetype, 'video')) {
+                $filetype = 'video';
+            }
+            // Data to object
+            $mediaObj = (object) [
+                'alt' => $filename,
+                'url' => $filenameToStore,
+                'type' => $filetype
+            ];
+            array_push($media, $mediaObj);
+            $media = json_encode($media);
+        }
+
+        // Handle specs
+        $specificationsObj = (object) [
+                $request->input('specification-name') =>  $request->input('specification-value')
+        ];
+        $specificationsObj = json_encode($specificationsObj);
+        // Update product
+        $product = Product::find($id);
+        $product->product_name = $request->input('name');
+        $product->product_price = $request->input('price');
+        $product->product_discount_percentage = $request->input('discount-percentage');
+        $product->product_description = $request->input('description');
+        if($request->hasFile('media')) {
+            $product->product_media = $media;
+        }
+        $product->product_specifications = $specificationsObj;
+        $product->save();
+
         //delete exsisting categories for this product
         $delCat = CategoryProduct::where('product_id_fk', $id)->delete();
 
