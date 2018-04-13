@@ -21,7 +21,7 @@
 						<div class="input-group-prepend">
 							<span class="input-group-text">&euro;</span>
 						</div>
-						{{Form::number('price', '', ['class' => 'form-control'])}}
+						{{Form::number('price', '', ['class' => 'form-control', 'step' => '.01'])}}
 					</div>
 				</div>
 			</div>

@@ -1,20 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-	<?php 
-		$medias = json_decode($product->product_media); 
-		$specifications = json_decode($product->product_specifications);
-	?>
-		<h3>{{$product->product_name}}</h3>
-		@if($product->product_discount_percentage != null)
-			<p style="text-decoration: line-through;">&euro; {{$product->product_price}}</p>
-			<p>&euro; {{$product->product_price - ($product->product_price * ($product->product_discount_percentage/100))}}</p>
-			<p>{{$product->product_discount_percentage}} &#37;</p>
-		@else
-			<p>&euro; {{$product->product_price}}</p>
-		@endif
-		<p>{{$product->product_description}}</p>
-		@foreach($medias as $media)
+	<h3>{{$product->product_name}}</h3>
+	@if($product->product_discount_percentage != null)
+		<p class="old-price">&euro; {{number_format($product->product_price, 2)}}</p>
+		<p>&euro; {{number_format($product->product_price - ($product->product_price * ($product->product_discount_percentage/100)), 2)}}</p>
+		<p>{{$product->product_discount_percentage}} &#37;</p>
+	@else
+		<p>&euro; {{number_format($product->product_price, 2)}}</p>
+	@endif
+	<p>{{$product->product_description}}</p>
 			@if($media->type == 'image')
 				<img src="{{$media->url}}" alt="{{$media->alt}}">
 				<p>*not actual size</p>
