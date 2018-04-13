@@ -8,7 +8,12 @@ p.old-price {
     right: 0;
     margin: 10px;
     color: white;
-    padding: 5px;
+    padding: 7px;
     background: $discount-bg;
     height: 37px;
+    transform: skew(-10deg);
+	
+	p {
+		transform: skew(10deg);
+	}
 }

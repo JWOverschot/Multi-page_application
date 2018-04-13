@@ -11334,7 +11334,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(11);
-module.exports = __webpack_require__(43);
+module.exports = __webpack_require__(45);
 
 
 /***/ }),
@@ -11349,8 +11349,10 @@ module.exports = __webpack_require__(43);
  */
 
 __webpack_require__(12);
+__webpack_require__(36);
+var genders = __webpack_require__(37);
 
-window.Vue = __webpack_require__(36);
+window.Vue = __webpack_require__(38);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -11358,7 +11360,7 @@ window.Vue = __webpack_require__(36);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example', __webpack_require__(39));
+Vue.component('example', __webpack_require__(41));
 
 var app = new Vue({
   el: '#app'
@@ -35860,6 +35862,184 @@ module.exports = function spread(callback) {
 
 /***/ }),
 /* 36 */
+/***/ (function(module, exports) {
+
+// Carousel buttons
+$(document).ready(function () {
+	$('.carousel-control-prev').on('click', function (ele) {
+		$(ele.currentTarget.parentElement).carousel('prev');
+	});
+	$('.carousel-control-next').on('click', function (ele) {
+		$(ele.currentTarget.parentElement).carousel('next');
+	});
+});
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports) {
+
+module.exports = [
+  'Abimegender',
+  'Adamasgender',
+  'Aerogender',
+  'Aesthetigender',
+  'Affectugender',
+  'Agender',
+  'Agenderflux',
+  'Alexigender',
+  'Aliusgender',
+  'Amaregender',
+  'Ambigender',
+  'Ambonec',
+  'Amicagender',
+  'Androgyne',
+  'Androgynous',
+  'Anesigender',
+  'Angenital',
+  'Anogender',
+  'Anongender',
+  'Antegender',
+  'Anxiegender',
+  'Apagender',
+  'Apconsugender',
+  'Astergender',
+  'Astralgender',
+  'Autogender',
+  'Axigender',
+  'Bigender',
+  'Biogender',
+  'Blurgender',
+  'Boyflux',
+  'Burstgender',
+  'Caelgender',
+  'Cassgender',
+  'Cassflux',
+  'Cavusgender',
+  'Cendgender',
+  'Ceterofluid',
+  'Ceterogender',
+  'Cis',
+  'Cisgender',
+  'Cis Female',
+  'Cis Male',
+  'Cis Man',
+  'Cis Woman',
+  'Cisgender Female',
+  'Cisgender Male',
+  'Cisgender Man',
+  'Cisgender Woman',
+  'Cloudgender',
+  'Collgender',
+  'Colorgender',
+  'Commogender',
+  'Condigender',
+  'Deliciagender',
+  'Demifluid',
+  'Demiflux',
+  'Demigender',
+  'Domgender',
+  'Duragender',
+  'Egogender',
+  'Epicene',
+  'Espigender',
+  'Exgender',
+  'Existigender',
+  'Female to Male',
+  'Femfluid',
+  'Femgender',
+  'Fluidflux',
+  'FTM',
+  'Gemigender',
+  'Genderblank',
+  'Genderflow',
+  'Genderfluid',
+  'Genderflux',
+  'Genderfuzz',
+  'Gender Neutral',
+  'Gender Nonconforming',
+  'Genderpunk',
+  'Genderqueer',
+  'Gender Questioning',
+  'Gender Variant',
+  'Genderwitched',
+  'Girlflux',
+  'Glassgender',
+  'Glimragender',
+  'Greygender',
+  'Gyragender',
+  'Healgender',
+  'Heliogender',
+  'Hemigender',
+  'Horogender',
+  'Hydrogender',
+  'Imperigender',
+  'Intergender',
+  'Juxera',
+  'Libragender',
+  'Magigender',
+  'Male to Female',
+  'Mascfluid',
+  'Mascgender',
+  'Maverique',
+  'Mirrorgender',
+  'Molligender',
+  'Multigender',
+  'MTF',
+  'Nanogender',
+  'Neither',
+  'Neutrois',
+  'Non-binary',
+  'Omnigender',
+  'Oneirogender',
+  'Other',
+  'Pangender',
+  'Paragender',
+  'Perigender',
+  'Polygender',
+  'Proxvir',
+  'Quoigender',
+  'Subgender',
+  'Surgender',
+  'Systemgender',
+  'Tragender',
+  'Trans',
+  'Trans*',
+  'Trans Female',
+  'Trans* Female',
+  'Trans Male',
+  'Trans* Male',
+  'Trans Man',
+  'Trans* Man',
+  'Trans Person',
+  'Trans* Person',
+  'Trans Woman',
+  'Trans* Woman',
+  'Transfeminine',
+  'Transgender',
+  'Transgender Female',
+  'Transgender Male',
+  'Transgender Man',
+  'Transgender Person',
+  'Transgender Woman',
+  'Transmasculine',
+  'Transsexual',
+  'Transsexual Female',
+  'Transsexual Male',
+  'Transsexual Man',
+  'Transsexual Person',
+  'Transsexual Woman',
+  'Trigender',
+  'Two-Spirit',
+  'Vapogender',
+  'Venngender',
+  'Verangender',
+  'Vibragender',
+  'Vocigender'
+]
+
+
+/***/ }),
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -46822,10 +47002,10 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(37).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(39).setImmediate))
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var apply = Function.prototype.apply;
@@ -46878,7 +47058,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(38);
+__webpack_require__(40);
 // On some exotic environments, it's not clear which object `setimmeidate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -46892,7 +47072,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -47085,15 +47265,15 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(5)))
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(40)
+var normalizeComponent = __webpack_require__(42)
 /* script */
-var __vue_script__ = __webpack_require__(41)
+var __vue_script__ = __webpack_require__(43)
 /* template */
-var __vue_template__ = __webpack_require__(42)
+var __vue_template__ = __webpack_require__(44)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -47132,7 +47312,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -47241,7 +47421,7 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -47270,7 +47450,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -47313,7 +47493,7 @@ if (false) {
 }
 
 /***/ }),
-/* 43 */
+/* 45 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
