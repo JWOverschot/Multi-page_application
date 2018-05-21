@@ -53,30 +53,37 @@
 		</div>
 
 		<label for="specification-name">Specifications</label>
+		@php($specRow = 0)
 		@foreach($specifications as $k=>$v)
-			<div class="row">
+			<div class="row" id="specifications">
 				<div class="col-6">
 					<div class="form-group">
-						{{Form::label('specification-name', 'Specification name')}}
-						{{Form::text('specification-name', $k, ['class' => 'form-control'])}}
+						{{Form::label('specification-name_'.$specRow, 'Specification name', ['class' => 'specification-name'])}}
+						{{Form::text('specification-name_'.$specRow, $k, ['class' => 'form-control'])}}
 					</div>
 				</div>
 				<div class="col-6">
 					<div class="form-group">
-						{{Form::label('specification-value', 'Specification value')}}
+						{{Form::label('specification-value_'.$specRow, 'Specification value', ['class' => 'specification-name'])}}
 						@if($v === true)
-							{{Form::text('specification-value', 'True', ['class' => 'form-control'])}}
+							{{Form::text('specification-value_'.$specRow, 'True', ['class' => 'form-control'])}}
 						@elseif($v === false)
-							{{Form::text('specification-value', 'False', ['class' => 'form-control'])}}
+							{{Form::text('specification-value_'.$specRow, 'False', ['class' => 'form-control'])}}
 						@else
-							{{Form::text('specification-value', $v, ['class' => 'form-control'])}}
+							{{Form::text('specification-value_'.$specRow, $v, ['class' => 'form-control'])}}
 						@endif
 					</div>
 				</div>
 			</div>
+			@php($specRow++)
 		@endforeach
+		<div class="mb-3">
+			<button id="addSpecRow" class="btn btn-outline-primary">Add specification row</button>
+		</div>
 		{{Form::hidden('_method', 'PUT')}}
-		{{Form::submit('Submit', ['class' => 'btn btn-primary'])}}
+		{{Form::submit('Submit', ['class' => 'btn btn-primary pull-left mb-2'])}}
 	{!! Form::close() !!}
+	<a href="#" role="button" class="btn btn-danger pull-right mb-2" data-toggle="modal" data-target="#confirm-delete">Delete</a>
 
+	@include('inc.delete-modal')
 @endsection

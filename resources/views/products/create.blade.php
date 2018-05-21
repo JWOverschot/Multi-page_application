@@ -57,21 +57,23 @@
 		</div>
 
 		<label for="specification-name">Specifications</label>
-		<div class="row">
+		<div class="row" id="specifications">
 			<div class="col-6">
 				<div class="form-group">
-					{{Form::label('specification-name', 'Specification name')}}
-					{{Form::text('specification-name', '', ['class' => 'form-control'])}}
+					{{Form::label('specification-name_0', 'Specification name', ['class' => 'specification-name'])}}
+					{{Form::text('specification-name_0', '', ['class' => 'form-control'])}}
 				</div>
 			</div>
 			<div class="col-6">
 				<div class="form-group">
-					{{Form::label('specification-value', 'Specification value')}}
-					{{Form::text('specification-value', '', ['class' => 'form-control'])}}
+					{{Form::label('specification-value_0', 'Specification value', ['class' => 'specification-value'])}}
+					{{Form::text('specification-value_0', '', ['class' => 'form-control'])}}
 				</div>
 			</div>
 		</div>
-
+		<div class="mb-3">
+			<button id="addSpecRow" class="btn btn-outline-primary">Add specification row</button>
+		</div>
 		{{Form::submit('Submit', ['class' => 'btn btn-primary'])}}
 	{!! Form::close() !!}
 

@@ -19,14 +19,34 @@ Route::get('/dashboard', 'DashboardController@index');
 
 Route::get('/categories', 'CategoriesController@index');
 
-Route::get('/welkom', 'PagesController@index');
+Route::get('/orders', 'OrdersController@index');
 
-Route::get('/about', function(){
-	return view('pages.about');
-});
+Route::get('/clients/edit', 'ClientsController@edit');
 
-Route::get('/users/{id}/{name}', function($id, $name){
-	return 'This is user '.$name;
-});
+Route::get('/clients/edit-billing-address', 'ClientsController@editBillingAddress')->name('clients.editBillingAddress');
 
-Route::resource('products', 'ProductsController');Route::resource('categories', 'CategoriesController');
+Route::put('/clients/{id}/updateBillingAddress', 'ClientsController@updateBillingAddress')->name('clients.updateBillingAddress');
+
+Route::get('/clients/edit-shipping-address', 'ClientsController@editShippingAddress')->name('clients.editShippingAddress');
+
+Route::put('/clients/{id}/updateShippingAddress', 'ClientsController@updateShippingAddress')->name('clients.updateShippingAddress');
+
+Route::get('/shopping-cart', 'ProductsController@getCart')->name('product.shoppingCart');
+
+Route::get('/add-to-cart/{id}', 'ProductsController@addToCart')->name('product.addToCart');
+
+Route::get('/remove-one-from-cart/{id}', 'ProductsController@removeOneCartItem')->name('product.removeOneCartItem');
+
+Route::get('/remove-all-from-cart/{id}', 'ProductsController@removeCartItems')->name('product.removeCartItems');
+
+Route::resource('products', 'ProductsController');
+
+Route::resource('categories', 'CategoriesController');
+
+Route::resource('orders', 'OrdersController');
+
+Route::resource('clients', 'ClientsController');
+
+Route::get('users/{user}', 'UsersController@edit')->name('users.edit');
+
+Route::patch('users/{user}/update', 'UsersController@update')->name('users.update');

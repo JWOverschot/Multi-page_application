@@ -11350,7 +11350,6 @@ module.exports = __webpack_require__(45);
 
 __webpack_require__(12);
 __webpack_require__(36);
-var genders = __webpack_require__(37);
 
 window.Vue = __webpack_require__(38);
 
@@ -35862,15 +35861,60 @@ module.exports = function spread(callback) {
 
 /***/ }),
 /* 36 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-// Carousel buttons
+// Require array of genders
+var genders = __webpack_require__(37);
+
 $(document).ready(function () {
+	// Carousel buttons
 	$('.carousel-control-prev').on('click', function (ele) {
 		$(ele.currentTarget.parentElement).carousel('prev');
 	});
 	$('.carousel-control-next').on('click', function (ele) {
 		$(ele.currentTarget.parentElement).carousel('next');
+	});
+
+	// Add specification row to products/edit.blade.php
+	var specRow = 0;
+	$('#addSpecRow').on('click', function (e) {
+		e.preventDefault();
+		specRow++;
+		var specs = $('#specifications').children();
+		var specName = $(specs[0]).clone().appendTo('#specifications');
+		var specValue = $(specs[1]).clone().appendTo('#specifications');
+
+		// input
+		specName.find('#specification-name_0').attr({
+			name: 'specification-name_' + specRow,
+			id: 'specification-name_' + specRow
+		}).val('');
+		// label
+		specName.find('.specification-name').attr('for', 'specification-name_' + specRow);
+
+		// input
+		specValue.find('#specification-value_0').attr({
+			name: 'specification-value_' + specRow,
+			id: 'specification-value_' + specRow
+		}).val('');
+		// label
+		specValue.find('.specification-value').attr('for', 'specification-value_' + specRow);
+	});
+
+	// Gender selector on register page and profile edit
+	if ($('.gender-selector').length > 0) {
+		var gendersRev = genders.reverse();
+		gendersRev.forEach(function (gender) {
+			var option = '<option value="' + gender + '">' + gender + '</option>';
+			if ($('.gender-selector').hasClass(gender)) {
+				option = '<option value="' + gender + '" selected>' + gender + '</option>';
+			}
+			$('.gender-selector').after(option);
+		});
+	}
+	// Delete post confirmation dialog
+	$('#confirm-delete').on('show.bs.modal', function (e) {
+		$(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
 	});
 });
 

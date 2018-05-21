@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Storage;
+use Session;
+
 use App\Product;
 use App\Category;
 use App\CategoryProduct;
+use App\Cart;
 
 class ProductsController extends Controller
 {
@@ -16,7 +20,7 @@ class ProductsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['index', 'show']]);
+        $this->middleware('auth', ['except' => ['index', 'show', 'addToCart', 'getCart', 'removeOneCartItem', 'removeCartItems']]);
     }
     /**
      * Display a listing of the resource.
@@ -25,7 +29,7 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $products = Product::orderBy('product_name', 'asc')->get();
+        $products = Product::orderBy('created_at', 'desc')->get();
         return view('products.index')->with('products', $products);
     }
 
@@ -54,8 +58,8 @@ class ProductsController extends Controller
             'price' => 'required',
             'media' => 'image|required|max:20000',
             'category' => 'required',
-            'specification-name' => 'required',
-            'specification-value' => 'required'
+            'specification-name_0' => 'required',
+            'specification-value_0' => 'required'
         ]);
 
         //handle file upload
@@ -89,10 +93,15 @@ class ProductsController extends Controller
             $media = json_encode($media);
         }
         // Handle specs
-        $specificationsObj = (object) [
-                $request->input('specification-name') => $request->input('specification-value')
-        ];
-        $specificationsObj = json_encode($specificationsObj);
+        $specRow = 0;
+        $specsArray = [];
+        foreach($request->input() as $key => $val) {
+            if($key == 'specification-name_'.$specRow) {
+                $specsArray[$val] = $request->input('specification-value_'.$specRow);
+                $specRow++;
+            }
+        }
+        $specificationsJson = json_encode($specsArray);
 
         // Create product
         $product = new Product;
@@ -101,7 +110,7 @@ class ProductsController extends Controller
         $product->product_discount_percentage = $request->input('discount-percentage');
         $product->product_description = $request->input('description');
         $product->product_media = $media;
-        $product->product_specifications = $specificationsObj;
+        $product->product_specifications = $specificationsJson;
         $product->save();
 
         // Handle categories
@@ -168,14 +177,14 @@ class ProductsController extends Controller
      */
     public function update(Request $request, $id)
     {
-         $this->validate($request, [
+        $this->validate($request, [
             'name' => 'required',
             'description' => 'required',
             'price' => 'required',
             'media' => 'image|max:20000',
             'category' => 'required',
-            'specification-name' => 'required',
-            'specification-value' => 'required'
+            'specification-name_0' => 'required',
+            'specification-value_0' => 'required'
         ]);
 
         //handle file upload
@@ -210,10 +219,29 @@ class ProductsController extends Controller
         }
 
         // Handle specs
-        $specificationsObj = (object) [
-                $request->input('specification-name') =>  $request->input('specification-value')
-        ];
-        $specificationsObj = json_encode($specificationsObj);
+        $specRow = 0;
+        $specsArray = [];
+        foreach($request->input() as $key => $val) {
+            if($key == 'specification-name_'.$specRow) {
+                $specValue = $request->input('specification-value_'.$specRow);
+                switch (strtolower($specValue)) {
+                    case 'true':
+                    case 'yes':
+                        $specValue = true;
+                        break;
+                    case 'false':
+                    case 'no':
+                        $specValue = false;
+                        break;
+                    default:
+                        //
+                        break;
+                }
+                $specsArray[$val] = $specValue;
+                $specRow++;
+            }
+        }
+        $specificationsJson = json_encode($specsArray);
         // Update product
         $product = Product::find($id);
         $product->product_name = $request->input('name');
@@ -223,7 +251,7 @@ class ProductsController extends Controller
         if($request->hasFile('media')) {
             $product->product_media = $media;
         }
-        $product->product_specifications = $specificationsObj;
+        $product->product_specifications = $specificationsJson;
         $product->save();
 
         //delete exsisting categories for this product
@@ -248,6 +276,61 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::find($id);
+        $images = json_decode($product->product_media);
+
+        foreach ($images as $image) {
+            Storage::delete('public/product_images/'.$image->url);
+        }
+
+        $product->delete();
+        return redirect('/')->with('success', 'Post Deleted');
+    }
+
+    // Get shopping cart
+    public function getCart() {
+        if (!Session::has('cart')) {
+            return view('shopping-cart.index');
+        }
+        $oldCart = Session::get('cart');
+        $cart = new Cart($oldCart);
+        // Remove cart from session storage when empty
+        if ($cart->totalQty <= 0) {
+            Session::forget('cart');
+        }
+        return view('shopping-cart.index', ['products' => $cart->items, 'totalPrice' => $cart->totalPrice]);
+    }
+    // Get add to shopping cart
+    public function addToCart(Request $request, $id)
+    {
+        $product = Product::find($id);
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        $cart = new Cart($oldCart);
+        $cart->add($product, $product->product_id);
+
+        Session::put('cart', $cart);
+        return redirect()->back();
+    }
+    // Remove one item shopping cart
+    public function removeOneCartItem(Request $request, $id)
+    {
+        $product = Product::find($id);
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        $cart = new Cart($oldCart);
+        $cart->remove($product, $product->product_id, false);
+
+        Session::put('cart', $cart);
+        return redirect()->back();
+    }
+    // Remove all same items shopping cart
+    public function removeCartItems(Request $request, $id)
+    {
+        $product = Product::find($id);
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        $cart = new Cart($oldCart);
+        $cart->remove($product, $product->product_id, true);
+
+        Session::put('cart', $cart);
+        return redirect('/shopping-cart');
     }
 }

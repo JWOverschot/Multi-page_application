@@ -23,7 +23,7 @@
 <body>
     <div id="app">
         @include('inc.navbar')
-        <main class="py-4 container">
+        <main class="py-4 container-fluid">
             @include('inc.messages')
             @yield('content')
         </main>

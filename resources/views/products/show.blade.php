@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+	<a class="btn btn-outline-primary col-12" href="{{route('product.addToCart', ['id' => $product->product_id])}}" role="button"><i class="fa fa-cart-plus"></i></a>
 	<h3>{{$product->product_name}}</h3>
 	@if($product->product_discount_percentage != null)
 		<p class="old-price">&euro; {{number_format($product->product_price, 2)}}</p>
@@ -51,4 +52,7 @@
 			</tr>
 		@endforeach
 	</table>
+	@if (!Auth::guest())
+		<a href="{{$_SERVER['REQUEST_URI']}}/edit" class="btn btn-outline-success" role="button">Edit</a>
+	@endif
 @endsection

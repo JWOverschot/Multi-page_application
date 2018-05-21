@@ -13054,7 +13054,18 @@ p.old-price {
   opacity: 0.7;
 }
 
-.card .discount {
+div.card .card-img-top {
+  -o-object-fit: cover;
+     object-fit: cover;
+  width: 100%;
+  height: 250px;
+}
+
+div.card .card-body {
+  /*max-height: 157px;*/
+}
+
+.discount {
   position: absolute;
   right: 0;
   margin: 10px;
@@ -13066,8 +13077,22 @@ p.old-price {
           transform: skew(-10deg);
 }
 
-.card .discount p {
+.discount p {
   -webkit-transform: skew(10deg);
           transform: skew(10deg);
+}
+
+ul.list-group.list-group-sm .list-group-item {
+  padding: 0.05rem 1.25rem;
+}
+
+input.border-color-primary {
+  border-color: #3097D1;
+}
+
+/*Shopping cart style*/
+
+.shopping-cart .discount {
+  margin: 0;
 }
 

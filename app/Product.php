@@ -14,4 +14,8 @@ class Product extends Model
     public function categories(){
     	return $this->belongsToMany('App\Category', 'category_product', 'product_id_fk', 'category_id_fk');
     }
+    // Relate to order modal
+    public function orders(){
+    	return $this->belongsToMany('App\Order', 'order_product', 'product_id_fk', 'order_id_fk')->withPivot('quantity', 'price');
+    }
 }
