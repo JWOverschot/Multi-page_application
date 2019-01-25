@@ -31,13 +31,13 @@ Route::get('/clients/edit-shipping-address', 'ClientsController@editShippingAddr
 
 Route::put('/clients/{id}/updateShippingAddress', 'ClientsController@updateShippingAddress')->name('clients.updateShippingAddress');
 
-Route::get('/shopping-cart', 'ProductsController@getCart')->name('product.shoppingCart');
+Route::get('/shopping-cart', 'CartController@getCart')->name('product.shoppingCart');
 
-Route::get('/add-to-cart/{id}', 'ProductsController@addToCart')->name('product.addToCart');
+Route::get('/add-to-cart/{id}', 'CartController@addToCart')->name('product.addToCart');
 
-Route::get('/remove-one-from-cart/{id}', 'ProductsController@removeOneCartItem')->name('product.removeOneCartItem');
+Route::get('/remove-one-from-cart/{id}', 'CartController@removeOneCartItem')->name('product.removeOneCartItem');
 
-Route::get('/remove-all-from-cart/{id}', 'ProductsController@removeCartItems')->name('product.removeCartItems');
+Route::get('/remove-all-from-cart/{id}', 'CartController@removeCartItems')->name('product.removeCartItems');
 
 Route::resource('products', 'ProductsController');
 

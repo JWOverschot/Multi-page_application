@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Storage;
-use Session;
 
 use App\Product;
 use App\Category;
@@ -285,52 +284,5 @@ class ProductsController extends Controller
 
         $product->delete();
         return redirect('/')->with('success', 'Post Deleted');
-    }
-
-    // Get shopping cart
-    public function getCart() {
-        if (!Session::has('cart')) {
-            return view('shopping-cart.index');
-        }
-        $oldCart = Session::get('cart');
-        $cart = new Cart($oldCart);
-        // Remove cart from session storage when empty
-        if ($cart->totalQty <= 0) {
-            Session::forget('cart');
-        }
-        return view('shopping-cart.index', ['products' => $cart->items, 'totalPrice' => $cart->totalPrice]);
-    }
-    // Get add to shopping cart
-    public function addToCart(Request $request, $id)
-    {
-        $product = Product::find($id);
-        $oldCart = Session::has('cart') ? Session::get('cart') : null;
-        $cart = new Cart($oldCart);
-        $cart->add($product, $product->product_id);
-
-        Session::put('cart', $cart);
-        return redirect()->back();
-    }
-    // Remove one item shopping cart
-    public function removeOneCartItem(Request $request, $id)
-    {
-        $product = Product::find($id);
-        $oldCart = Session::has('cart') ? Session::get('cart') : null;
-        $cart = new Cart($oldCart);
-        $cart->remove($product, $product->product_id, false);
-
-        Session::put('cart', $cart);
-        return redirect()->back();
-    }
-    // Remove all same items shopping cart
-    public function removeCartItems(Request $request, $id)
-    {
-        $product = Product::find($id);
-        $oldCart = Session::has('cart') ? Session::get('cart') : null;
-        $cart = new Cart($oldCart);
-        $cart->remove($product, $product->product_id, true);
-
-        Session::put('cart', $cart);
-        return redirect('/shopping-cart');
     }
 }

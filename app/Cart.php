@@ -10,12 +10,16 @@ class Cart
     public $totalQty = 0;
     public $totalPrice = 0;
 
-    public function __construct($oldCart) {
-    	if ($oldCart) {
-    		$this->items = $oldCart->items;
-    		$this->totalQty = $oldCart->totalQty;
-    		$this->totalPrice = $oldCart->totalPrice;
-    	}
+    public function __construct() {
+    	if (Session::has('cart')) {
+            if (Session::get('cart')->totalQty <= 0) {
+                Session::forget('cart');
+            } else {
+                $this->items = Session::get('cart')->items;
+                $this->totalQty = Session::get('cart')->totalQty;
+                $this->totalPrice = Session::get('cart')->totalPrice;
+            }
+        }
     }
     // Add product to shopping cart
     public function add($item, $id) {
@@ -35,6 +39,8 @@ class Cart
     	$this->items[$id] = $storedItem;
     	$this->totalQty++;
     	$this->totalPrice += $itemPrice;
+
+        Session::put('cart', $this);
     }
     // Remove item from cart
     public function remove($item, $id, $removeAll) {
@@ -68,5 +74,6 @@ class Cart
                 unset($this->items[$id]);
             }
         }
+        Session::put('cart', $this);
     }
 }
